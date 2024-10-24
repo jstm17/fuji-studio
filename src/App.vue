@@ -1,11 +1,19 @@
+  
 <script setup>
-import Header from './components/Header.vue';
+import Header from "./components/Header.vue";
 </script>
 
 <template>
-  <Header />
-  <RouterView></RouterView>
-</template>
+  <div id="app">
+    <Header />
 
-<style scoped>
-</style>
+    <main>
+      <router-view v-slot="{ Component, route }">
+        <!-- Use a custom transition or fallback to `fade` -->
+        <transition :name="route.meta.transition" mode="out-in">
+          <component :is="Component" :key="$route.path" />
+        </transition>
+      </router-view>
+    </main>
+  </div>
+</template>
