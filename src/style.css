@@ -4,13 +4,48 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
   background-color: #edeef3;
-  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #edeef3 15px ), repeating-linear-gradient( #f3f4f755, #f3f4f7 );
-  height: 100vh;
+  background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #edeef3 15px), repeating-linear-gradient(#f3f4f755, #f3f4f7);
+  min-height: 100vh;
   background-repeat: no-repeat;
+  margin: 0;
 }
 
-.bounded{
-  @apply mx-20 max-md:mx-14 max-sm:mx-10;
+.bounded {
+  @apply px-20 max-md:px-14 max-sm:px-10;
+}
+
+.portfolio-enter-active,
+.portfolio-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.portfolio-leave-active,
+.portfolio-enter-active,
+.home-leave-active,
+.home-enter-active,
+.about-leave-active,
+.about-enter-active {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
+.portfolio-leave-to,
+.portfolio-enter-from,
+.home-leave-to,
+.home-enter-from,
+.about-leave-to,
+.about-enter-from  {
+  opacity: 0;
+}
+
+
+.careforu-leave-active {
+  transition: transform 1s ease-in-out;
+}
+
+/* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
+.careforu-leave-to {
+  transform: translateY(100vh);
 }
