@@ -1,0 +1,248 @@
+/*@font-face {
+    font-family: 'Kalnia';
+    src: url('./../fonts/Kalnia-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}*/
+
+/* Kalnia - Normal */
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia';
+    src: url('../fonts/Kalnia-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Kalnia - SemiExpanded */
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia SemiExpanded';
+    src: url('../fonts/Kalnia_SemiExpanded-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Kalnia - Expanded */
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kalnia Expanded';
+    src: url('../fonts/Kalnia_Expanded-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Afacad - Regular */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Afacad - Medium */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* Afacad - SemiBold */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* Afacad - Bold */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Afacad - Italic */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Afacad - Medium Italic */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+/* Afacad - SemiBold Italic */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+/* Afacad - Bold Italic */
+@font-face {
+    font-family: 'Afacad';
+    src: url('../fonts/Afacad-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+.logo {
+    font-family: 'Kalnia', sans-serif;
+}
+
+h1{
+    @apply !text-7xl max-lg:!text-6xl max-sm:!text-5xl;
+}
+
+h2{
+    @apply !text-5xl max-lg:!text-4xl max-sm:!text-3xl;
+}
+
+h3{
+    @apply text-2xl;
+}
+
+body{
+    font-family: 'Afacad', sans-serif;
+}
