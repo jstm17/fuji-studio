@@ -1,3 +1,83 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    margin: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active,
+.nested-enter-active,
+.nested-leave-active,
+.works-enter-active,
+.works-leave-active  {
+  transition: transform 0.5s ease;
+}
+
+
+
+.fade-leave-active .inner{
+  transition: width 0.5s ease;
+}
+
+/* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
+.fade-leave-to .inner {
+    width: 100%;
+}
+
+
+.nested-leave-active .inner{
+    transition: width 0.5s ease;
+  
+  }
+.nested-leave-to .inner {
+    width: 50%;
+}
+
+.fade-enter-active .out, 
+.fade-leave-active .out, 
+.nested-enter-active .out, 
+.nested-leave-active .out{
+    transition: opacity 0.5s ease;
+  }
+
+.fade-leave-to .out,
+.fade-enter-from .out,
+.nested-leave-to .out,
+.nested-enter-from .out{
+  opacity: 1;
+}
+
+  
+
+
+/* 
+.nested-enter-active,
+.nested-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+  opacity: 0;
+} */
+
+.works-leave-active, .works-enter-active {
+    transition: opacity 1s ease-in-out;
+  }
+  
+  /* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
+  .works-leave-to, .works-enter-from  {
+      opacity: 0;
+  }
+
+
+.careforu-leave-active {
+    transition: transform 1s ease-in-out;
+  }
+  
+  /* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
+  .careforu-leave-to  {
+      transform: translateY(100vh);
+  }
