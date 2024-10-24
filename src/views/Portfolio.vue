@@ -1,8 +1,8 @@
 <template>
   <div>
     <img :src="currentImage" alt="" class="fixed -translate-y-full fi w-full h-[100vh]" />
-    <div class="w-full flex items-center carousel-container">
-      <div class="img-carousel flex gap-[5%] w-max">
+    <div class="w-full flex items-center carousel-container h-[100vh]">
+      <div class="img-carousel flex gap-[5%] w-max px-[calc(50vw-300px)]">
         <router-link
           v-for="(slide, index) in slides"
           :to="slide.link"
@@ -157,19 +157,8 @@ export default {
 </style>
 
 <style scoped>
-.carousel-container {
-  height: 100vh;
-}
-
-
 img {
   max-width: unset;
-}
-
-.img-carousel {
-  padding: 0 calc(
-    50vw - 300px
-  ); 
 }
 
 .img-carousel img {
