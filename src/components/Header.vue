@@ -2,12 +2,9 @@
     <header class="bounded flex justify-between pt-20 mb-10">
         <p class="logo">FUJI STUDIO</p>
         <nav>
-            <ul class="flex gap-6">
-                <li>A propos</li>
-                <li>Portfolio</li>
-                <li>Services</li>
-                <li>Contact</li>
-            </ul>
+            <router-link to="/">Home</router-link>
+            <router-link to="/a-propos">À propos</router-link>
+            <router-link to="/portfolio">Portfolio</router-link>
         </nav>
     </header>
 </template>
