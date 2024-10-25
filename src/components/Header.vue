@@ -1,5 +1,5 @@
 <template>
-    <header class="bounded flex justify-between py-10 z-10 fixed w-full">
+    <header class="bounded flex justify-between pt-20 mb-10">
         <p class="logo">FUJI STUDIO</p>
         <nav class="flex gap-20">
       <router-link to="/">Home</router-link>
