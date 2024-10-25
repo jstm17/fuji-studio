@@ -1,5 +1,5 @@
 <template>
-    <div class="bounded flex-1 flex flex-col pb-20">
+    <div class="bounded h-full flex flex-col pb-20">
         <div class="h-fit">
             <h1>Deux esprits, une vision</h1>
             <p class="text-end my-6">Nous sommes Fideline et Julie, <br> le duo derrière Fuji</p>
