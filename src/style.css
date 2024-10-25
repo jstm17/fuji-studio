@@ -6,8 +6,7 @@
 
 body {
   background-color: #edeef3;
-  background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #edeef3 15px), repeating-linear-gradient(#f3f4f755, #f3f4f7);
-  min-height: 100vh;
+  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #edeef3 15px ), repeating-linear-gradient( #f3f4f755, #f3f4f7 );
   background-repeat: no-repeat;
   margin: 0;
 }
@@ -48,4 +47,8 @@ body {
 /* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
 .careforu-leave-to {
   transform: translateY(100vh);
+}
+
+#app{
+  @apply  h-screen flex flex-col 
 }

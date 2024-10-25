@@ -14,7 +14,7 @@ const routes = [
     meta: { transition: 'home' },
   },
   {
-    path: '/about',
+    path: '/a-propos',
     name: 'About',
     component: About,
     meta: { transition: 'about' },
