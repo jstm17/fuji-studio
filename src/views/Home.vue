@@ -1,5 +1,5 @@
 <template>
-    <div class="bounded flex-1 flex flex-col text-center pb-20">
+    <div class="bounded h-full flex flex-col text-center pb-20">
         <div class="flex-1  flex flex-col justify-center" >
             <h1 class=" text-center pb-8">Quand le code <br>rejoint la créativité</h1>
             <p class="text-center text-md">Nous créons des expériences numériques qui parlent plus fort que les mots</p>

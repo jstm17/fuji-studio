@@ -7,7 +7,7 @@ import Header from "./components/Header.vue";
   <div id="app">
     <Header />
 
-    <main>
+    <main class="flex-1">
       <router-view v-slot="{ Component, route }">
         <!-- Use a custom transition or fallback to `fade` -->
         <transition :name="route.meta.transition" mode="out-in">
