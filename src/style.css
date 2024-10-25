@@ -50,5 +50,5 @@ body {
 }
 
 #app{
-  @apply  h-screen flex flex-col 
+  @apply  h-screen flex flex-col max-sm:min-h-screen max-sm:h-auto
 }
