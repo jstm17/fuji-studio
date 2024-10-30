@@ -6,9 +6,12 @@
 
 body {
   background-color: #edeef3;
-  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #edeef3 15px ), repeating-linear-gradient( #f3f4f755, #f3f4f7 );
   background-repeat: no-repeat;
+  background: url('./assets/img/bg-pattern.png');
+  background-size: cover;
   margin: 0;
+  -webkit-animation: scale-up-center 30s ease-out infinite alternate ;
+	animation: scale-up-center 40s ease-out infinite alternate ;
 }
 
 .bounded {
@@ -51,4 +54,26 @@ body {
 
 #app{
   @apply  h-screen flex flex-col max-sm:min-h-screen max-sm:h-auto
+}
+
+.front{
+  z-index: 50;
+}
+
+h1, h2, h3, h4, h5, h6, p , button, a{
+  z-index: 50;
+}
+
+@-webkit-keyframes slide {
+  from { background-position: 0 0; }
+  to { background-position: -512px -512px; }
+}
+
+@keyframes scale-up-center {
+  0% {
+    background-size: 100%;
+  }
+  100% {
+    background-size: 200%;
+  }
 }
