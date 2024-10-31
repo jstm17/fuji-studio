@@ -9,6 +9,23 @@ body {
   background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #edeef3 15px ), repeating-linear-gradient( #f3f4f755, #f3f4f7 );
   background-repeat: no-repeat;
   margin: 0;
+  cursor: none !important;
+}
+
+* {
+  cursor: none !important;
+}
+
+#cursor {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #65adff80; /* Bleu clair */
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  z-index: 1000;
 }
 
 .bounded {
@@ -49,6 +66,6 @@ body {
   transform: translateY(100vh);
 }
 
-#app{
+/* #app{
   @apply  h-screen flex flex-col max-sm:min-h-screen max-sm:h-auto
-}
+} */
