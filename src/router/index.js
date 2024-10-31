@@ -1,23 +1,17 @@
 /* eslint-disable */
 
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
+import Studio from '../views/Studio.vue'
 import Portfolio from '../views/Portfolio.vue'
 import CareForU from '../views/CareForU.vue'
+import Services from '../views/Services.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-    meta: { transition: 'home' },
-  },
-  {
-    path: '/a-propos',
-    name: 'About',
-    component: About,
-    meta: { transition: 'about' },
+    name: 'Studio',
+    component: Studio,
+    meta: { transition: 'studio' },
   },
   {
     path: '/portfolio',
@@ -30,7 +24,13 @@ const routes = [
     name: 'CareForU',
     component: CareForU,
     meta: { transition: 'careforu' },
-  }
+  },
+  {
+    path: '/services',
+    name: 'Services',
+    component: Services,
+    meta: { transition: 'home' },
+  },
 ]
 
 const router = createRouter({
