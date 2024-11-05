@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bounded flex h-fit justify-between pt-20 mb-10 relative z-10 max-lg:pt-16 max-md:pt-12 items-center"
+    class="bounded flex h-fit justify-between pt-20 mb-10 z-10 max-lg:pt-16 max-md:pt-12 items-center fixed w-full"
   >
     <p class="logo z-10">FUJI STUDIO</p>
 
@@ -54,6 +54,7 @@ const links = [
   { name: "Le Studio", path: "/" },
   { name: "Portfolio", path: "/portfolio" },
   { name: "Services", path: "/services" },
+  { name: "Contact", path: "/contact" },
 ];
 
 window.addEventListener("resize", () => {

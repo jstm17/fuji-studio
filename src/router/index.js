@@ -5,13 +5,14 @@ import Studio from '../views/Studio.vue'
 import Portfolio from '../views/Portfolio.vue'
 import CareForU from '../views/CareForU.vue'
 import Services from '../views/Services.vue'
+import Contact from '../views/Contact.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Studio',
     component: Studio,
-    meta: { transition: 'studio' },
+    meta: { transition: 'home' },
   },
   {
     path: '/portfolio',
@@ -31,6 +32,13 @@ const routes = [
     component: Services,
     meta: { transition: 'home' },
   },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: Contact,
+    meta: { transition: 'home' },
+  }
+  
 ]
 
 const router = createRouter({

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div ref="studioContainer">
     <div
       class="bounded flex-1 flex h-full flex-col text-center pb-20 pt-32 fixed home-container w-full max-lg:pt-28 max-lg:pb-16 max-md:pb-12"
     >
-      <div class="flex-1 flex flex-col justify-center first-section">
+      <div ref=" first-section" class="flex-1 flex flex-col justify-center first-section">
         <h1 class="text-center pb-8 max-md:text-sm">
           <span
             v-for="(letter, index) in firstLineLetters"
@@ -34,7 +34,10 @@
         class="flex-1 flex justify-between second-section hidden py-12 gap-8 max-header:flex-col max-sm:py-0"
       >
         <div class="w-1/2 flex flex-col justify-between max-header:w-full">
-          <h1 class="text-start lg:!text-6xl md:!text-5xl max-sm:!text-3xl" ref="secondSectionTitle">
+          <h1
+            class="text-start lg:!text-6xl md:!text-5xl max-sm:!text-3xl"
+            ref="secondSectionTitle"
+          >
             <span
               v-for="(letter, index) in firstLineLetters2"
               :key="'first-' + index"
@@ -44,7 +47,7 @@
               <span v-if="letter === ' '">&nbsp;</span>
               <span v-else>{{ letter }}</span>
             </span>
-            <br v-if="windowWidth > 909"/>
+            <br v-if="windowWidth > 909" />
             <span
               v-for="(letter, index) in secondLineLetters2"
               :key="'second-' + index"
@@ -63,8 +66,13 @@
             attrayantes.
           </p>
         </div>
-        <div class="flex flex-col w-1/2 max-header:w-full max-header:flex-row gap-8 flex-1 max-sm:!flex-col">
-          <p class="text-end my-6 max-header:w-2/5 max-sm:!w-full max-sm:m-0" ref="credits">
+        <div
+          class="flex flex-col w-1/2 max-header:w-full max-header:flex-row gap-8 flex-1 max-sm:!flex-col"
+        >
+          <p
+            class="text-end my-6 max-header:w-2/5 max-sm:!w-full max-sm:m-0"
+            ref="credits"
+          >
             <!-- Ajout du ref ici -->
             Nous sommes Fideline et Julie, <br />
             le duo derrière Fuji
@@ -78,7 +86,7 @@
       <div
         class="flex h-fit justify-between max-sm:flex-wrap max-sm:gap-8 items-center relative max-sm:flex-col max-sm:gap-4"
       >
-         <div ref="guide">
+        <div ref="guide">
           <GuideButton buttonText="Télécharger le guide" />
         </div>
         <div ref="button">
@@ -93,13 +101,6 @@
         Envie de commencer l'aventure ?
       </h1>
     </div>
-    <div
-      class="h-[100vh] w-full bg-[#dfedff] fixed opacity-0 third-section bounded pt-32 hidden"
-      ref="guideSection"
-    >
-      <h1>Envie de commencer l'aventure ?</h1>
-      <h1>Services & Tarifs</h1>
-    </div>
   </div>
 </template>
 <script>
@@ -108,9 +109,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"; // Ajoutez cette ligne
 gsap.registerPlugin(ScrollTrigger);
 export default {
   beforeRouteEnter(to, from, next) {
-    document.querySelector("header").classList.add("fixed", "w-full");
-    document.querySelector("#app").classList.add("h-[200vh]");
-    document.querySelector("header").classList.remove("relative");
+    // document.querySelector("header").classList.add("fixed", "w-full");
+    document.querySelector("#app").classList.add("h-[400vh]");
+    // document.querySelector("header").classList.remove("relative");
     document.body.classList.add("h-[unset]", "no-scroll");
     // gsap.set(".first-section", { display: "flex" });
     // gsap.set(".second-section", { display: "none" });
@@ -119,10 +120,10 @@ export default {
     next((vm) => {});
   },
   beforeRouteLeave(to, from, next) {
-    document.querySelector("header").classList.remove("fixed", "w-full");
-    document.querySelector("header").classList.add("relative");
+    // document.querySelector("header").classList.remove("fixed", "w-full");
+    // document.querySelector("header").classList.add("relative");
     document.body.classList.remove("h-[unset]", "no-scroll");
-    document.querySelector("#app").classList.add("h-[200vh]");
+    document.querySelector("#app").classList.remove("h-[400vh]");
     next();
   },
 };
@@ -156,6 +157,8 @@ const router = useRouter();
 const guideSection = ref(null);
 const guide = ref(null);
 const serviceTitle = ref(null);
+const studioContainer = ref(null);
+const firstSection = ref(null);
 const windowWidth = ref(window.innerWidth);
 // Smoke effect animation function
 const smokeEffect = (event) => {
@@ -170,19 +173,27 @@ const smokeEffect = (event) => {
     ease: "power3.out",
     onComplete: () => {
       // Wait for 2 seconds before restoring the letter
-      gsap.to(letter, {
-        duration: 0.5,
-        opacity: 1,
-        filter: "blur(0px)",
-        y: 0,
-        ease: "power3.inOut",
-        // delay: 0.5,
-      });
+      gsap.fromTo(
+        letter,
+        {
+          opacity: 0,
+          filter: "blur(4px)",
+          y: 20,
+        },
+        {
+          duration: 0.5,
+          opacity: 1,
+          filter: "blur(0px)",
+          y: 0,
+          ease: "power3.inOut",
+          // delay: 0.5,
+        }
+      );
     },
   });
 };
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   windowWidth.value = window.innerWidth;
 });
 
@@ -217,7 +228,7 @@ onMounted(() => {
       scrollTrigger: {
         trigger: ".home-container",
         start: "top top",
-        end: "bottom 90%",
+        end: "bottom top",
         scrub: 1,
         //   onLeave: () => {
         // letters.value.forEach((letter) => {
@@ -237,14 +248,14 @@ onMounted(() => {
     duration: 0.8,
     scrollTrigger: {
       trigger: subtitle.value,
-      start: "center center", // Ajustez le point de déclenchement si nécessaire
-      end: "center 90%",
+      start: "center top", // Ajustez le point de déclenchement si nécessaire
+      end: "center top",
       scrub: 1,
       // markers: true,
-      // onLeave: () => {
-      //   // Redirection vers la page "About" une fois l'animation du sous-titre terminée
-      //   router.push({ name: "About" });
-      // },
+      onLeave: () => {
+        // Redirection vers la page "About" une fois l'animation du sous-titre terminée
+        router.push({ name: "About" });
+      },
       onLeave: () => {
         // Masquer `first-section` et afficher `second-section`
         gsap.delayedCall(0.2, () => {
@@ -274,6 +285,7 @@ onMounted(() => {
 
   // Animation for title
   gsap.from(letters.value, {
+    filter: "blur(10px)",
     opacity: 0,
     y: -80,
     duration: 0.5,
@@ -306,8 +318,8 @@ onMounted(() => {
     duration: 0.8,
     scrollTrigger: {
       trigger: ".home-container",
-      start: "10% top",
-      end: "bottom 70%",
+      start: "70% top",
+      end: "bottom -30%",
       scrub: 1,
       // markers: true
     },
@@ -318,14 +330,14 @@ onMounted(() => {
     y: "100vh", // Commence en bas
     scrollTrigger: {
       trigger: ".home-container",
-      start: "10% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-      end: "bottom 70%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+      start: "70% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+      end: "bottom -30%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
       scrub: 1, // Fait suivre l'animation au défilement
       // markers: true, // Pour déboguer, retirez-le en production
     },
   });
 
-  // Animation for description
+  // // Animation for description
   gsap.from(description.value, {
     opacity: 0,
     y: 20,
@@ -333,8 +345,8 @@ onMounted(() => {
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".home-container",
-      start: "30% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-      end: "bottom 70%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+      start: "bottom top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+      end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
       scrub: 1, // Fait suivre l'animation au défilement
       // markers: true, // Pour déboguer, retirez-le en production
     },
@@ -347,8 +359,8 @@ onMounted(() => {
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".home-container",
-      start: "10% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-      end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+      start: "80% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+      end: "bottom -30%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
       scrub: 1, // Fait suivre l'animation au défilement
       // markers: true, // Pour déboguer, retirez-le en production
       // markers: true,
@@ -362,100 +374,101 @@ onMounted(() => {
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".home-container",
-      start: "10% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-      end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+      start: "85% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+      end: "bottom -50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
       scrub: 1, // Fait suivre l'animation au défilement
       // markers: true, // Pour déboguer, retirez-le en production
       onLeave: () => {
-        gsap.set(".second-section", { display: "flex" });
+          gsap.set(".second-section", { display: "flex" });
 
         gsap.to(credits.value, {
           opacity: 0,
-          x: "100vw",
+          x: "50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
-            start: "4% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            start: "18% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
 
         gsap.to(photo1.value, {
           opacity: 0,
-          x: "100vw",
+          x: "50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
-            start: "3% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            start: "10% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
 
         gsap.to(photo2.value, {
           opacity: 0,
-          x: "100vw",
+          x: "50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
-            start: "2% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            start: "8% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
 
         gsap.to(button.value, {
           opacity: 0,
-          x: "100vw",
+          x: "50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
             start: "top top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
 
         gsap.to(secondSectionTitle.value, {
           opacity: 0,
-          x: "-100vw",
+          x: "-50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
-            start: "4% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            start: "18% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
 
         gsap.to(description.value, {
           opacity: 0,
-          x: "-100vw",
+          x: "-50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
-            start: "2% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            start: "8% top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
+            // markers: true,
           },
         });
 
         gsap.to(guide.value, {
           opacity: 0,
-          x: "-100vw",
+          x: "-50vw",
           duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".home-container",
             start: "top top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 50%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             scrub: 1,
           },
         });
@@ -469,11 +482,14 @@ onMounted(() => {
           scrollTrigger: {
             trigger: ".home-container",
             start: "top top", // Commence quand le haut du paragraphe atteint 90% de la fenêtre
-            end: "bottom 75%", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
+            end: "bottom top", // Termine quand le bas du paragraphe atteint le haut de la fenêtre
             // markers: true,
             scrub: 1,
             onLeave: () => {
               router.push({ name: "Services" });
+              // gsap.delayedCall(0.5, () => {
+              //   gsap.set(studioContainer, { display: "none" });
+              // });
             },
           },
         });
