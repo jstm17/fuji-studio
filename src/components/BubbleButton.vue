@@ -54,7 +54,7 @@ onMounted(() => {
 
   button.addEventListener("mouseenter", () => {
     gsap.to(button.children[0], {
-      duration: 0.5,
+      duration: 1,
       attr: { width: 200, fill: "#0056b3" },
       autoAlpha: 0.8,
       ease: "elastic.out(1, 0.3)",
@@ -68,7 +68,7 @@ onMounted(() => {
 
   button.addEventListener("mouseleave", () => {
     gsap.to(button.children[0], {
-      duration: 0.5,
+      duration: 1,
       attr: { width: 60, fill: "#65ADFF" },
       autoAlpha: 0.4,
       ease: "elastic.out(1, 0.3)",

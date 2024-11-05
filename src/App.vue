@@ -15,6 +15,7 @@
     </main>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
@@ -76,7 +77,7 @@ onMounted(() => {
   }
 
   // Enable page reload on resize
-  reloadOnResize();
+  // reloadOnResize();
 });
 </script>
 
