@@ -39,7 +39,6 @@
     </nav>
   </header>
 </template>
-
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -49,7 +48,7 @@ const route = useRoute();
 const circle = ref(null);
 const isMenuOpen = ref(false);
 const windowWidth = ref(window.innerWidth);
-// Définissez vos liens de navigation
+
 const links = [
   { name: "Le Studio", path: "/" },
   { name: "Portfolio", path: "/portfolio" },
@@ -63,7 +62,6 @@ window.addEventListener("resize", () => {
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-  console.log(isMenuOpen.value)
 };
 
 const closeMenu = () => {
@@ -84,18 +82,16 @@ watch(route, () => {
 const moveIndicatorToActiveLink = () => {
   const navLinks = document.querySelectorAll("header nav a");
   const currentPath = route.path;
-  // Find the active link
   const activeLink = Array.from(navLinks).find(
     (link) => link.getAttribute("href") === currentPath
   );
-  console.log(activeLink);
 
   if (activeLink && circle.value) {
     const { offsetLeft, offsetWidth } = activeLink;
-    console.log(offsetLeft);
-    console.log(offsetWidth);
 
-    // Animation du cercle vers le lien actif
+    // // Annule toute animation en cours sur le cercle avant de le déplacer
+    // gsap.killTweensOf(circle.value);
+
     gsap.to(circle.value, {
       left: offsetLeft + offsetWidth / 2,
       x: "-50%",
@@ -105,6 +101,7 @@ const moveIndicatorToActiveLink = () => {
   }
 };
 </script>
+
 
 <style scoped>
 .nav-link {
