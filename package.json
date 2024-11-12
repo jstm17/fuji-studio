@@ -9,8 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "curtainsjs": "^8.1.6",
     "gsap": "^3.12.5",
+    "locomotive-scroll": "^4.1.4",
+    "smooth-scrollbar": "^8.8.4",
     "vue": "^3.3.11",
+    "vue-curtains": "^1.0.2",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {

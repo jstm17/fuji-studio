@@ -10,6 +10,7 @@ body {
   background-repeat: no-repeat;
   margin: 0;
   cursor: none !important;
+  overflow-x: hidden;
 }
 
 * {
@@ -24,17 +25,22 @@ textarea {
   border-radius: 10px;
 }
 
-#cursor {
+input:focus,
+textarea:focus {
+  outline: #0056b3 2px solid;
+}
+
+/* #cursor {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #65adff80; /* Bleu clair */
+  background-color: #65adff80;
   position: absolute;
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: background-color 0.2s ease, transform 0.2s ease;
   z-index: 1000;
-}
+} */
 
 .bounded {
   @apply px-20 max-md:px-14 max-sm:px-10;

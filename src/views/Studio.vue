@@ -3,8 +3,11 @@
     <div
       class="bounded flex-1 flex h-full flex-col text-center pb-20 pt-32 fixed home-container w-full max-lg:pt-28 max-lg:pb-16 max-md:pb-12"
     >
-      <div ref=" first-section" class="flex-1 flex flex-col justify-center first-section">
-        <h1 class="text-center pb-8 max-md:text-sm">
+      <div
+        ref=" first-section"
+        class="flex-1 flex flex-col justify-center first-section"
+      >
+        <h1 class="text-center pb-8 max-md:text-sm uppercase">
           <span
             v-for="(letter, index) in firstLineLetters"
             :key="'first-' + index"
@@ -25,9 +28,18 @@
             <span v-else>{{ letter }}</span>
           </span>
         </h1>
-        <p ref="subtitle" class="text-center text-md">
+        <!-- <p ref="subtitle" class="text-center text-md">
           Nous créons des expériences numériques qui parlent plus fort que les
           mots
+        </p> -->
+        <p ref="subtitle" class="my-6 overflow-hidden">
+          <span
+            v-for="(word, index) in subtitleWords"
+            :key="index"
+            class="inline-block mr-1 relative overflow-hidden"
+          >
+            <span class="inline-block" ref="words">{{ word }}</span>
+          </span>
         </p>
       </div>
       <div
@@ -35,7 +47,7 @@
       >
         <div class="w-1/2 flex flex-col justify-between max-header:w-full">
           <h1
-            class="text-start lg:!text-6xl md:!text-5xl max-sm:!text-3xl"
+            class="text-start lg:!text-6xl md:!text-5xl max-sm:!text-3xl uppercase"
             ref="secondSectionTitle"
           >
             <span
@@ -89,9 +101,11 @@
         <div ref="guide">
           <GuideButton buttonText="Télécharger le guide" />
         </div>
-        <div ref="button">
-          <BubbleButton buttonText="Commencer l'aventure" />
-        </div>
+        <router-link to="/services">
+          <div ref="button">
+            <BubbleButton buttonText="Commencer l'aventure" />
+          </div>
+        </router-link>
       </div>
 
       <h1
@@ -124,13 +138,15 @@ export default {
     // document.querySelector("header").classList.add("relative");
     document.body.classList.remove("h-[unset]", "no-scroll");
     document.querySelector("#app").classList.remove("h-[400vh]");
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
     next();
   },
 };
 </script>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUnmounted } from "vue";
 import gsap from "gsap";
 import PrimaryButton from "../components/PrimaryButton.vue";
 import BubbleButton from "../components/BubbleButton.vue";
@@ -146,6 +162,9 @@ const secondLineText2 = "une vision";
 const firstLineLetters2 = ref([...firstLineText2]);
 const secondLineLetters2 = ref([...secondLineText2]);
 const secondSectionTitle = ref(null);
+const subtitleText =
+  "Nous créons des expériences numériques qui parlent plus fort que les mots";
+const subtitleWords = ref(subtitleText.split(" ")); // Split the title into words
 const credits = ref(null);
 const description = ref(null);
 const subtitle = ref(null);
@@ -160,6 +179,7 @@ const serviceTitle = ref(null);
 const studioContainer = ref(null);
 const firstSection = ref(null);
 const windowWidth = ref(window.innerWidth);
+const words = ref(null);
 // Smoke effect animation function
 const smokeEffect = (event) => {
   const letter = event.target;
@@ -240,16 +260,16 @@ onMounted(() => {
   );
 
   // Animation séparée pour le sous-titre
-  gsap.to(subtitle.value, {
+  gsap.to(words.value, {
     opacity: 0,
     y: -20,
     ease: "power2.out",
     delay: 2,
     duration: 0.8,
     scrollTrigger: {
-      trigger: subtitle.value,
-      start: "center top", // Ajustez le point de déclenchement si nécessaire
-      end: "center top",
+      trigger: words.value,
+      start: `center top`, // Ajustez le point de déclenchement si nécessaire
+      end: `center top`, // Ajustez le point de déclenchement si nécessaire
       scrub: 1,
       // markers: true,
       onLeave: () => {
@@ -300,12 +320,13 @@ onMounted(() => {
   });
 
   // Animation for subtitle
-  gsap.from(subtitle.value, {
+  gsap.from(words.value, {
+    delay: 1,
     opacity: 0,
-    y: 20,
-    delay: 1.3,
-    duration: 1,
-    ease: "power2.out",
+    ease: "power3.out",
+    y: 50,
+    stagger: 0.1,
+    duration: 0.8,
   });
 
   // Animation deuxième section
@@ -337,7 +358,7 @@ onMounted(() => {
     },
   });
 
-  // // Animation for description
+  // // // Animation for description
   gsap.from(description.value, {
     opacity: 0,
     y: 20,
@@ -379,7 +400,7 @@ onMounted(() => {
       scrub: 1, // Fait suivre l'animation au défilement
       // markers: true, // Pour déboguer, retirez-le en production
       onLeave: () => {
-          gsap.set(".second-section", { display: "flex" });
+        gsap.set(".second-section", { display: "flex" });
 
         gsap.to(credits.value, {
           opacity: 0,
@@ -495,6 +516,9 @@ onMounted(() => {
         });
       },
     },
+  });
+  onUnmounted(() => {
+    // gsap.killTweensOf("*");
   });
 });
 </script>

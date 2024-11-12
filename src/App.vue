@@ -1,7 +1,7 @@
   
 <template>
   <div id="app">
-    <Loading />
+    <!-- <Loading /> -->
     <Header />
     <div id="cursor"></div>
 
@@ -24,7 +24,8 @@ import Loading from "./components/Loading.vue";
 import Header from "./components/Header.vue";
 
 // Reactive properties
-const isLoading = ref(true);
+const isLoading = ref(false);
+// const isLoading = ref(true);
 const cursor = ref(null);
 const windowWidth = ref(window.innerWidth);
 const route = useRoute();
@@ -67,9 +68,9 @@ onMounted(() => {
   setCursorEffects();
 
   // Trigger loading animation (e.g., 4 seconds)
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 4000);
+  // setTimeout(() => {
+  //   isLoading.value = false;
+  // }, 4000);
 
   // Custom height for /studio route
   if (route.path === "/studio") {
