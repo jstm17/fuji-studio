@@ -1,15 +1,5 @@
 <template>
     <div id="page-wrap">
-
-<!-- <div class="form-group flex flex-col gap-1 mb-4 w-full">
-          <label for="name">Name</label>
-        </div>
-        <div class="form-group flex flex-col gap-1 mb-4 w-full">
-          <label for="email">Email</label>
-        </div>
-        <div class="form-group flex flex-col gap-1 mb-8 w-full">
-          <label for="message">Message</label>
-        </div> -->
 			<div id="canvas"></div>
 
 			<div class="curtain">

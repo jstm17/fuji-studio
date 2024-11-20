@@ -1,14 +1,14 @@
 <template>
   <div id="container" ref="containerRef">
     <div id="content" ref="contentRef">
-      <WorkCurtain>
+      <CurtainWork>
         <img
           src="../assets/img/portfolio/reah.png"
           crossorigin=""
           data-sampler="simplePlaneTexture"
           class="hidden"
         />
-      </WorkCurtain>
+      </CurtainWork>
 
       <div class="bounded pb-32">
         <div
@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import WorkCurtain from "../components/WorkCurtain.vue";
+import CurtainWork from "../components/CurtainWork.vue";
 import WorkTitle from "../components/WorkTitle.vue";
 import PrimaryButton from "../components/PrimaryButton.vue";
 import { ref, onMounted, onUnmounted, capitalize } from "vue";
