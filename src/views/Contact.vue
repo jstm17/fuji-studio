@@ -19,19 +19,42 @@
       >
         <div class="form-group flex flex-col gap-1 mb-4 w-full">
           <label for="name">Nom</label>
-          <input type="text" id="name" name="user_name" v-model="form.name" required />
+          <input
+            type="text"
+            id="name"
+            name="user_name"
+            v-model="form.name"
+            required
+          />
         </div>
         <div class="form-group flex flex-col gap-1 mb-4 w-full">
           <label for="email">Email</label>
-          <input type="email" id="email" name="user_email" v-model="form.email" required />
+          <input
+            type="email"
+            id="email"
+            name="user_email"
+            v-model="form.email"
+            required
+          />
         </div>
         <div class="form-group flex flex-col gap-1 mb-4 w-full">
           <label for="object">Objet</label>
-          <input type="object" id="object" name="object" v-model="form.object" required />
+          <input
+            type="object"
+            id="object"
+            name="object"
+            v-model="form.object"
+            required
+          />
         </div>
         <div class="form-group flex flex-col gap-1 mb-8 w-full">
           <label for="message">Message</label>
-          <textarea id="message" name="message" v-model="form.message" required></textarea>
+          <textarea
+            id="message"
+            name="message"
+            v-model="form.message"
+            required
+          ></textarea>
         </div>
         <PrimaryButton
           buttonText="Envoyer votre vision"
@@ -225,7 +248,6 @@ const form = ref({
   message: "",
 });
 
-    
 // Fonction de soumission
 const submitForm = () => {
   console.log("first");
@@ -241,7 +263,9 @@ const submitForm = () => {
     })
     .then(
       () => {
-        alert("Merci pour votre message, nous vous répondrons dès de possible !");
+        alert(
+          "Merci pour votre message, nous vous répondrons dès de possible !"
+        );
         form.value = { name: "", object: "", email: "", message: "" }; // Réinitialisation du formulaire
         isSending.value = false;
       },
