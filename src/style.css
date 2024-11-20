@@ -11,6 +11,7 @@ body {
   margin: 0;
   cursor: none !important;
   overflow-x: hidden;
+  /* height: 300vh; */
 }
 
 * {
@@ -71,13 +72,13 @@ textarea:focus {
 }
 
 
-.careforu-leave-active {
+.work-leave-active {
   transition: transform 1s ease-in-out;
 }
 
 /* Appliquer la largeur de 100% pendant la phase de sortie (leave-active) */
-.careforu-leave-to {
-  transform: translateY(100vh);
+.work-leave-to {
+  transform: translateY(102%);
 }
 
 /* #app{

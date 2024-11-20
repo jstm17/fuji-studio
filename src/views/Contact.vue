@@ -1,19 +1,14 @@
 <template>
-  <div class="contact-container pb-20 pt-32 bounded">
-    <div class="h-6 w-6"></div>
-
-    <h1 ref="heading" class="my-6 overflow-hidden">
+  <div class="contact-container pb-20 pt-32 bounded max-lg:pt-24 max-md:pt-16">
+    <h2 ref="heading" class="my-6 overflow-hidden uppercase">
       <span
         v-for="(word, index) in titleWords"
-        :key="'first-' + index"
-        class="inline-block mr-4 relative overflow-hidden pb-4 max-lg:pb-2 max-sm:pb-1"
+        :key="index"
+        class="inline-block mr-4 relative overflow-hidden pb-4 max-lg:pb-2 max-sm:pb-0"
       >
         <span class="inline-block" ref="words">{{ word }}</span>
       </span>
-    </h1>
-
-    <p ref="subtitle" class="mb-4">Parlez-nous de votre projet</p>
-
+    </h2>
     <div
       class="grid grid-cols-2 gap-[10vw] max-md:flex-col items-center max-md:!flex"
     >
@@ -23,18 +18,25 @@
         ref="formContainer"
       >
         <div class="form-group flex flex-col gap-1 mb-4 w-full">
-          <label for="name">Name</label>
-          <input type="text" id="name" v-model="form.name" required />
+          <label for="name">Nom</label>
+          <input type="text" id="name" name="user_name" v-model="form.name" required />
         </div>
         <div class="form-group flex flex-col gap-1 mb-4 w-full">
           <label for="email">Email</label>
-          <input type="email" id="email" v-model="form.email" required />
+          <input type="email" id="email" name="user_email" v-model="form.email" required />
+        </div>
+        <div class="form-group flex flex-col gap-1 mb-4 w-full">
+          <label for="object">Objet</label>
+          <input type="object" id="object" name="object" v-model="form.object" required />
         </div>
         <div class="form-group flex flex-col gap-1 mb-8 w-full">
           <label for="message">Message</label>
-          <textarea id="message" v-model="form.message" required></textarea>
+          <textarea id="message" name="message" v-model="form.message" required></textarea>
         </div>
-        <PrimaryButton buttonText="Envoyer votre vision"></PrimaryButton>
+        <PrimaryButton
+          buttonText="Envoyer votre vision"
+          :disabled="isSending"
+        ></PrimaryButton>
       </form>
       <div class="flex flex-col gap-6 max-md:w-full h-full" ref="contactInfos">
         <div
@@ -62,7 +64,6 @@
               >info@fujistudio.com</span
             >
           </a>
-
           <a href="#" class="flex gap-2 items-center social-media">
             <img
               src="../assets/img/ic-instagram.svg"
@@ -73,7 +74,6 @@
               >@FuJi-studio</span
             >
           </a>
-
           <a href="#" class="flex gap-2 items-center social-media">
             <img
               src="../assets/img/ic-linkedin.svg"
@@ -85,7 +85,7 @@
             >
           </a>
         </div>
-        <Curtainjs2 />
+        <ContactCurtain />
       </div>
     </div>
   </div>
@@ -95,17 +95,28 @@
 import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import PrimaryButton from "../components/PrimaryButton.vue";
-import Curtainjs2 from "../components/Curtainjs2.vue";
+import ContactCurtain from "../components/ContactCurtain.vue";
+import LocomotiveScroll from "locomotive-scroll";
+import emailjs from "@emailjs/browser";
 
 const title = "Prêt à donner vie à votre projet ?";
 const titleWords = ref(title.split(" ")); // Split the title into words
-const subtitle = ref(null);
 const formContainer = ref(null);
 const contactInfos = ref(null);
 const words = ref(null);
 const texts = ref([]);
+const isSending = ref(false); // État de l'envoi
 
 onMounted(() => {
+  const scroll = new LocomotiveScroll({
+    el: document.querySelector(".contact-container"),
+    smooth: true,
+    smartphone: { smooth: true },
+    tablet: { smooth: true },
+    inertia: 0.5,
+    passive: true,
+  });
+
   const socialMedias = document.querySelectorAll(".social-media");
   console.log(socialMedias);
   const tl = gsap.timeline();
@@ -163,18 +174,6 @@ onMounted(() => {
     duration: 0.8,
   });
 
-  // Animation du sous-titre
-  tl.from(
-    subtitle.value,
-    {
-      opacity: 0,
-      y: 20,
-      duration: 1,
-      ease: "power2.out",
-    },
-    "-=0.5"
-  );
-
   //   // Animation du formulaire et des informations de contact
   gsap.utils.toArray(formContainer.value.children).forEach((child) => {
     tl.from(
@@ -218,20 +217,46 @@ onMounted(() => {
   );
 });
 
+// Initialisation du formulaire
 const form = ref({
   name: "",
+  object: "",
   email: "",
   message: "",
 });
 
+    
+// Fonction de soumission
 const submitForm = () => {
-  console.log("Form submitted", form.value);
-  form.value = { name: "", email: "", message: "" };
+  console.log("first");
+  if (isSending.value) return; // Empêche les envois multiples
+  isSending.value = true;
+
+  const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const userID = import.meta.env.VITE_EMAILJS_USER_ID;
+  emailjs
+    .sendForm(serviceID, templateID, formContainer.value, {
+      publicKey: userID,
+    })
+    .then(
+      () => {
+        alert("Merci pour votre message, nous vous répondrons dès de possible !");
+        form.value = { name: "", object: "", email: "", message: "" }; // Réinitialisation du formulaire
+        isSending.value = false;
+      },
+      (error) => {
+        alert("Erreur lors de l'envoi : " + error.text);
+        isSending.value = false;
+      }
+    );
 };
 </script>
 
+
 <style scoped>
-.photo {
-  background: url("./src/assets/img/careforu.png") no-repeat center/cover;
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 </style>
