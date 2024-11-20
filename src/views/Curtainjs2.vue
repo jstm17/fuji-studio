@@ -8,7 +8,7 @@
                 <div class="plane-inner h-full w-full">
                   <div class="plane">
                     <img
-                      src="../assets/img/reah.jpg"
+                      src="../assets/img/portfolio/reah.png"
                       crossorigin=""
                       data-sampler="planeTexture"
                     />

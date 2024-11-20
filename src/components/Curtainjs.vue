@@ -9,7 +9,7 @@
         <p class="absolute">coucou</p>
 
         <div id="flowmap">
-            <img src="../assets/img/reah.png" crossorigin="" data-sampler="planeTexture" />
+            <img src="../assets/img/portfolio/reah.png" crossorigin="" data-sampler="planeTexture" />
         </div>
 </div>
 </template>

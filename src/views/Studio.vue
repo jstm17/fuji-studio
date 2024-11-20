@@ -95,7 +95,7 @@
             <!-- <div class="bg-black" ref="photo1"><Curtainjs2 /></div> -->
             <div class="plane" ref="photo1">
               <img
-                src="../assets/img/reah.jpg"
+                src="../assets/img/portfolio/reah.png"
                 crossorigin=""
                 data-sampler="planeTexture"
                 
@@ -103,7 +103,7 @@
             </div>
             <div class="plane" ref="photo2">
               <img
-                src="../assets/img/reah.jpg"
+                src="../assets/img/portfolio/reah.png"
                 crossorigin=""
                 data-sampler="planeTexture"
                 
