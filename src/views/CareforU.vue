@@ -85,6 +85,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "CareforU",
+};
+</script>
+
 <script setup>
 import CurtainWork from "../components/CurtainWork.vue";
 import WorkTitle from "../components/WorkTitle.vue";
