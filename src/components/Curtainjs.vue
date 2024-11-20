@@ -1,333 +1,397 @@
 <template>
-  <div class="">
-    <h1>Test Juju 3</h1>
-    <!-- div that will hold our WebGL canvas -->
-    <div id="page-wrap">
-      <div id="canvas"></div>
-      <!-- div used to create our plane -->
-      <div class="flex-wrapper multi-textures">
-        <span>Click me !</span>
-        <!-- notice here we are using the data-sampler attribute to name our displacement sampler uniform -->
-        <img
-          src="../assets/img/careforu.png"
-          crossorigin=""
-          data-sampler="displacement"
-        />
-        <img src="../assets/img/careforu.png" crossorigin="" />
-        <img src="../assets/img/careforu.png" crossorigin="" />
-        <img src="../assets/img/careforu.png" crossorigin="" />
-      </div>
-    </div>
-  </div>
+<div id="page-wrap">
+
+	<div id="canvas2"></div>
+
+
+        <div id="canvas2"></div>
+
+        <p class="absolute">coucou</p>
+
+        <div id="flowmap">
+            <img src="../assets/img/reah.png" crossorigin="" data-sampler="planeTexture" />
+        </div>
+</div>
 </template>
 
 <script setup>
-import { Curtains, Plane } from "curtainsjs";
 import gsap from "gsap";
+import { onMounted, ref } from "vue";
+import LocomotiveScroll from "locomotive-scroll";
+
+import {Curtains, Plane, Vec2, PingPongPlane} from 'curtainsjs';
+
+onMounted(() => {
 
 window.addEventListener("load", () => {
-  // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
-    container: "canvas",
-    watchScroll: false, // no need to listen for the scroll in this example
-    pixelRatio: Math.min(1.5, window.devicePixelRatio), // limit pixel ratio for performance
-  });
-
-  // get our plane element
-  const planeElements = document.getElementsByClassName("multi-textures");
-  console.log(planeElements[0]);
-
-  // here we will handle which texture is visible and the timer to transition between images
-  const slideshowState = {
-    activeTextureIndex: 1,
-    nextTextureIndex: 2, // does not care for now
-    maxTextures: planeElements[0].querySelectorAll("img").length - 1, // -1 because displacement image does not count
-
-    isChanging: false,
-    transitionTimer: 0,
-  };
-
-  // handling errors
-  curtains
-    .onError(() => {
-      // we will add a class to the document body to display original images
-      document.body.classList.add("no-curtains", "image-1");
-
-      // handle simple slides management here
-      planeElements[0].addEventListener("click", () => {
-        if (slideshowState.activeTextureIndex < slideshowState.maxTextures) {
-          slideshowState.nextTextureIndex =
-            slideshowState.activeTextureIndex + 1;
-        } else {
-          slideshowState.nextTextureIndex = 1;
-        }
-
-        document.body.classList.remove(
-          "image-1",
-          "image-2",
-          "image-3",
-          "image-4"
-        );
-        document.body.classList.add("image-" + slideshowState.nextTextureIndex);
-
-        slideshowState.activeTextureIndex = slideshowState.nextTextureIndex;
-      });
-    })
-    .onContextLost(() => {
-      // on context lost, try to restore the context
-      curtains.restoreContext();
+    const curtains2 = new Curtains({
+        container: "canvas2",
+        antialias: false, // render targets will disable default antialiasing anyway
+        pixelRatio: Math.min(1.5, window.devicePixelRatio) // limit pixel ratio for performance
+    }).onError(() => {
+        // we will add a class to the document body to display original images
+        document.body.classList.add("no-curtains");
+    }).onContextLost(() => {
+        // on context lost, try to restore the context
+        curtains2.restoreContext();
     });
 
-  // disable drawing for now
-  curtains.disableDrawing();
 
-  const vs = `
+    // mouse/touch move
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+
+    const mouse = new Vec2(ww / 2, wh / 2);
+    const lastMouse = mouse.clone();
+    const velocity = new Vec2();
+
+    function onMouseMove(e) {
+        // velocity is our mouse position minus our mouse last position
+        lastMouse.copy(mouse);
+
+        // touch event
+        if(e.targetTouches) {
+            mouse.set(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+        }
+        // mouse event
+        else {
+            mouse.set(e.clientX, e.clientY);
+        }
+
+        // divided by a frame duration (roughly)
+        velocity.set((mouse.x - lastMouse.x) / 16, (mouse.y - lastMouse.y) / 16);
+
+        // we should update the velocity
+        updateVelocity = true;
+    }
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onMouseMove, {
+        passive: true
+    });
+
+    // if we should update the velocity or not
+    let updateVelocity = false;
+
+    // we'll be using this html element to create 2 planes
+    const planeElement = document.getElementById("flowmap");
+
+    // creating our PingPongPlane flowmap plane
+    // flowmap shaders
+    const flowmapVs = `
+        #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+        #else
         precision mediump float;
-
+        #endif
+    
         // default mandatory variables
         attribute vec3 aVertexPosition;
         attribute vec2 aTextureCoord;
-
+    
         uniform mat4 uMVMatrix;
         uniform mat4 uPMatrix;
-
-        // varyings : notice we've got 3 texture coords varyings
-        // one for the displacement texture
-        // one for our visible texture
-        // and one for the upcoming texture
+    
+        // custom variables
         varying vec3 vVertexPosition;
         varying vec2 vTextureCoord;
-        varying vec2 vActiveTextureCoord;
-        varying vec2 vNextTextureCoord;
-
-        // textures matrices
-        uniform mat4 activeTexMatrix;
-        uniform mat4 nextTexMatrix;
-
-        // custom uniforms
-        uniform float uTransitionTimer;
-
-
+    
         void main() {
-            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-
+    
+            vec3 vertexPosition = aVertexPosition;
+    
+            gl_Position = uPMatrix * uMVMatrix * vec4(vertexPosition, 1.0);
+    
             // varyings
             vTextureCoord = aTextureCoord;
-            vActiveTextureCoord = (activeTexMatrix * vec4(aTextureCoord, 0.0, 1.0)).xy;
-            vNextTextureCoord = (nextTexMatrix * vec4(aTextureCoord, 0.0, 1.0)).xy;
-
-            vVertexPosition = aVertexPosition;
+            vVertexPosition = vertexPosition;
         }
     `;
 
-  const fs = `
+    const flowmapFs = `
+        #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+        #else
         precision mediump float;
-
+        #endif
+    
         varying vec3 vVertexPosition;
         varying vec2 vTextureCoord;
-        varying vec2 vActiveTextureCoord;
-        varying vec2 vNextTextureCoord;
-
-        // custom uniforms
-        uniform float uTransitionTimer;
-
-        // our textures samplers
-        // notice how it matches the sampler attributes of the textures we created dynamically
-        uniform sampler2D activeTex;
-        uniform sampler2D nextTex;
-        uniform sampler2D displacement;
-
+    
+        uniform sampler2D uFlowMap;
+    
+        uniform vec2 uMousePosition;
+        uniform float uFalloff;
+        uniform float uAlpha;
+        uniform float uDissipation;
+        uniform float uCursorGrow;
+    
+        uniform vec2 uVelocity;
+        uniform float uAspect;
+        uniform float uOpacity;
         void main() {
-            // our displacement texture
-            vec4 displacementTexture = texture2D(displacement, vTextureCoord);
-
-            // slides transitions based on displacement and transition timer
-            vec2 firstDisplacementCoords = vActiveTextureCoord + displacementTexture.r * ((cos((uTransitionTimer + 90.0) / (90.0 / 3.141592)) + 1.0) / 1.25);
-            vec4 firstDistortedColor = texture2D(activeTex, vec2(vActiveTextureCoord.x, firstDisplacementCoords.y));
-
-            // same as above but we substract the effect
-            vec2 secondDisplacementCoords = vNextTextureCoord - displacementTexture.r * ((cos(uTransitionTimer / (90.0 / 3.141592)) + 1.0) / 1.25);
-            vec4 secondDistortedColor = texture2D(nextTex, vec2(vNextTextureCoord.x, secondDisplacementCoords.y));
-
-            // mix both texture
-            vec4 finalColor = mix(firstDistortedColor, secondDistortedColor, 1.0 - ((cos(uTransitionTimer / (90.0 / 3.141592)) + 1.0) / 2.0));
-
-            // handling premultiplied alpha
-            finalColor = vec4(finalColor.rgb * finalColor.a, finalColor.a);
-
-            gl_FragColor = finalColor;
+            vec2 textCoords = vTextureCoord;
+            
+            
+            /*** comment this whole block for a regular mouse flow effect ***/
+            
+            // convert to -1 -> 1
+            textCoords = textCoords * 2.0 - 1.0;
+            
+            // make the cursor grow with time
+            textCoords /= uCursorGrow;
+            // adjust cursor position based on its growth
+            textCoords += uCursorGrow * uMousePosition / (1.0 / (uCursorGrow - 1.0) * pow(uCursorGrow, 2.0));
+    
+            // convert back to 0 -> 1
+            textCoords = (textCoords + 1.0) / 2.0;
+            
+            /*** end of whole block commenting for a regular mouse flow effect ***/
+    
+    
+            vec4 color = texture2D(uFlowMap, textCoords) * uDissipation;
+            //vec4 color = vec4(0.0, 0.0, 0.0, 1.0) * uDissipation;
+    
+            vec2 mouseTexPos = (uMousePosition + 1.0) * 0.5;
+            vec2 cursor = vTextureCoord - mouseTexPos;
+            cursor.x *= uAspect;
+    
+            vec3 stamp = vec3(uVelocity * vec2(1.0, -1.0), 1.0 - pow(1.0 - min(1.0, length(uVelocity)), 3.0));
+            float falloff = smoothstep(uFalloff, 0.0, length(cursor)) * uAlpha;
+            color.rgb = mix(color.rgb, stamp, vec3(falloff));
+    
+            // handle premultiply alpha
+            color.rgb = color.rgb * color.a;
+    
+            gl_FragColor = color;
         }
     `;
 
-  // some basic parameters
-  const params = {
-    vertexShader: vs,
-    fragmentShader: fs,
-    uniforms: {
-      transitionTimer: {
-        name: "uTransitionTimer",
-        type: "1f",
-        value: 0,
-      },
-    },
-  };
+    // note the use of half float texture and the custom sampler name used in our fragment shader
+    const flowMapParams = {
+        sampler: "uFlowMap",
+        vertexShader: flowmapVs,
+        fragmentShader: flowmapFs,
+        texturesOptions: {
+            floatingPoint: "half-float" // use half float texture when possible
+        },
+        uniforms: {
+            mousePosition: {
+                name: "uMousePosition",
+                type: "2f",
+                value: mouse,
+            },
+            // size of the cursor
+            fallOff: {
+                name: "uFalloff",
+                type: "1f",
+                value: ww > wh ? ww / 30000 : wh / 20000,
+            },
+            // how much the cursor should grow with time
+            cursorGrow: {
+                name: "uCursorGrow",
+                type: "1f",
+                value: 1.15,
+            },
+            // alpha of the cursor
+            alpha: {
+                name: "uAlpha",
+                type: "1f",
+                value: 1,
+            },
+            // how much the cursor must dissipate over time (ie trail length)
+            // closer to 1 = no dissipation
+            dissipation: {
+                name: "uDissipation",
+                type: "1f",
+                value: 0.925,
+            },
+            // our velocity
+            velocity: {
+                name: "uVelocity",
+                type: "2f",
+                value: velocity,
+            },
+            // window aspect ratio to draw a circle
+            aspect: {
+                name: "uAspect",
+                type: "1f",
+                value: ww / wh,
+            },
+            uOpacity: { // Nouvelle uniform pour gérer l'opacité
+            name: "uOpacity",
+            type: "1f",
+            value: 0.5, // Par exemple, 50% d'opacité
+        },
+        },
+    };
 
-  const multiTexturesPlane = new Plane(curtains, planeElements[0], params);
+    // our ping pong plane
+    const flowMap = new PingPongPlane(curtains2, planeElement, flowMapParams);
 
-  multiTexturesPlane
-    .onLoading((texture) => {
-      // improve texture rendering on small screens with LINEAR_MIPMAP_NEAREST minFilter
-      texture.setMinFilter(curtains.gl.LINEAR_MIPMAP_NEAREST);
-    })
-    .onReady(() => {
-      // the idea here is to create two additionnal textures
-      // the first one will contain our visible image
-      // the second one will contain our entering (next) image
-      // that way we will deal with only activeTex and nextTex samplers in the fragment shader
-      // and we could easily add more images in the slideshow...
+    flowMap.onRender(() => {
+        // update mouse position
+        flowMap.uniforms.mousePosition.value = flowMap.mouseToPlaneCoords(mouse);
 
-      // first we set our very first image as the active texture
-      const activeTex = multiTexturesPlane.createTexture({
-        sampler: "activeTex",
-        fromTexture:
-          multiTexturesPlane.textures[slideshowState.activeTextureIndex],
-      });
-      // next we set the second image as next texture but this is not mandatory
-      // as we will reset the next texture on slide change
-      const nextTex = multiTexturesPlane.createTexture({
-        sampler: "nextTex",
-        fromTexture:
-          multiTexturesPlane.textures[slideshowState.nextTextureIndex],
-      });
-      console.log("first");
-
-      planeElements[0].addEventListener("click", () => {
-        console.log("first");
-        if (!slideshowState.isChanging) {
-          // enable drawing for now
-          curtains.enableDrawing();
-
-          slideshowState.isChanging = true;
-
-          // check what will be next image
-          if (slideshowState.activeTextureIndex < slideshowState.maxTextures) {
-            slideshowState.nextTextureIndex =
-              slideshowState.activeTextureIndex + 1;
-          } else {
-            slideshowState.nextTextureIndex = 1;
-          }
-          // apply it to our next texture
-          nextTex.setSource(
-            multiTexturesPlane.images[slideshowState.nextTextureIndex]
-          );
-
-          setTimeout(() => {
-            // disable drawing now that the transition is over
-            curtains.disableDrawing();
-
-            slideshowState.isChanging = false;
-            slideshowState.activeTextureIndex = slideshowState.nextTextureIndex;
-            // our next texture becomes our active texture
-            activeTex.setSource(
-              multiTexturesPlane.images[slideshowState.activeTextureIndex]
-            );
-            // reset timer
-            slideshowState.transitionTimer = 0;
-          }, 1700); // add a bit of margin to the timer
+        // update velocity
+        if(!updateVelocity) {
+            velocity.set(curtains2.lerp(velocity.x, 0, 0.5), curtains2.lerp(velocity.y, 0, 0.5));
         }
-      });
-    })
-    .onRender(() => {
-      // increase or decrease our timer based on the active texture value
-      if (slideshowState.isChanging) {
-        // use damping to smoothen transition
-        slideshowState.transitionTimer +=
-          (90 - slideshowState.transitionTimer) * 0.04;
+        updateVelocity = false;
 
-        // force end of animation as damping is slower the closer we get from the end value
-        if (
-          slideshowState.transitionTimer >= 88.5 &&
-          slideshowState.transitionTimer !== 90
-        ) {
-          slideshowState.transitionTimer = 90;
-        }
-      }
-
-      // update our transition timer uniform
-      multiTexturesPlane.uniforms.transitionTimer.value =
-        slideshowState.transitionTimer;
+        flowMap.uniforms.velocity.value = new Vec2(curtains2.lerp(velocity.x, 0, 0.1), curtains2.lerp(velocity.y, 0, 0.1));
+    }).onAfterResize(() => {
+        // update our window aspect ratio uniform
+        const boundingRect = flowMap.getBoundingRect();
+        flowMap.uniforms.aspect.value = boundingRect.width / boundingRect.height;
+        flowMap.uniforms.fallOff.value = boundingRect.width > boundingRect.height ? boundingRect.width / 30000 : boundingRect.height / 20000;
     });
+
+
+    // now use the texture of our ping pong plane in the plane that will actually be displayed
+    // displacement shaders
+    const displacementVs = `
+        #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+        #else
+        precision mediump float;
+        #endif
+    
+        // default mandatory variables
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+    
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+    
+        uniform mat4 planeTextureMatrix;
+    
+        // custom variables
+        varying vec3 vVertexPosition;
+        varying vec2 vPlaneTextureCoord;
+        varying vec2 vTextureCoord;
+    
+        void main() {
+    
+            vec3 vertexPosition = aVertexPosition;
+    
+            gl_Position = uPMatrix * uMVMatrix * vec4(vertexPosition, 1.0);
+    
+            // varyings
+            vTextureCoord = aTextureCoord;
+            vPlaneTextureCoord = (planeTextureMatrix * vec4(aTextureCoord, 0.0, 1.0)).xy;
+            vVertexPosition = vertexPosition;
+        }
+    `;
+
+    const displacementFs = `
+        #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+        #else
+        precision mediump float;
+        #endif
+    
+        varying vec3 vVertexPosition;
+        varying vec2 vPlaneTextureCoord;
+        varying vec2 vTextureCoord;
+    
+        uniform sampler2D planeTexture;
+        uniform sampler2D uFlowTexture;
+    
+        void main() {
+            // our flowmap
+            vec4 flowTexture = texture2D(uFlowTexture, vTextureCoord);
+    
+            // distort our image texture based on the flowmap values
+            vec2 distortedCoords = vPlaneTextureCoord;
+            distortedCoords -= flowTexture.xy * 0.1;
+    
+            // get our final texture based on the displaced coords
+            vec4 texture = texture2D(planeTexture, distortedCoords);
+    
+            // get a B&W version of our image texture
+            vec4 textureBW = vec4(1.0);
+            textureBW.rgb = vec3(texture.r * 0.3 + texture.g * 0.59 + texture.b * 0.11);
+    
+            // mix the BW image and the colored one based on our flowmap color values
+            float mixValue = clamp((abs(flowTexture.r) + abs(flowTexture.g) + abs(flowTexture.b)) * 1.5, 0.0, 1.0);
+            texture = mix(texture, textureBW, mixValue);
+    
+            // switch between this 2 lines to see what we have drawn onto our flowmap
+            //gl_FragColor = flowTexture;
+            gl_FragColor = texture;
+        }
+    `;
+
+    // next we will create the plane that will actually display our end result
+    // which means the image texture that will be displaced using the ping pong FBO texture
+    const params = {
+        vertexShader: displacementVs,
+        fragmentShader: displacementFs,
+    };
+
+    const plane2 = new Plane(curtains2, planeElement, params);
+
+    // create a texture that will hold our flowmap
+    const flowTexture = plane2.createTexture({
+        sampler: "uFlowTexture",
+        fromTexture: flowMap.getTexture() // set it based on our PingPongPlane flowmap plane's texture
+    });
+});
 });
 </script>
 <style scoped>
-#page-wrap {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
+@media screen {
 
-/*** canvas ***/
 
-#canvas {
-  height: 100vh;
-  width: 100vw;
+    /*** layout ***/
 
-  z-index: 10;
-}
+    #page-wrap {
+        position: relative;
+    }
 
-.multi-textures {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  bottom: 5%;
-  left: 5%;
-  z-index: 15;
+    /*** canvas2 ***/
 
-  cursor: pointer;
-  font-size: 3em;
-  color: white;
+    #canvas2 {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 10;
+    }
 
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-}
+    /*** content ***/
 
-.multi-textures img {
-  /* display: none; */
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
+    #content {
+        position: relative;
+        z-index: 15;
+        touch-action: none; /* disable pull to refresh on mobile */
+    }
 
-/*** handling errors ***/
+    #flowmap {
+        width: 100%;
+        height: 100vh;
+    }
 
-.no-curtains .multi-textures {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    #flowmap img {
+        display: none;
+    }
 
-.no-curtains .multi-textures span {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3D(-50%, -50%, 0);
-}
 
-.no-curtains.image-1 .multi-textures img:nth-child(3) {
-  display: block;
-}
+    /*** handling errors ***/
 
-.no-curtains.image-2 .multi-textures img:nth-child(4) {
-  display: block;
-}
+    .no-curtains #flowmap {
+        display: flex;
+        overflow: hidden;
+    }
 
-.no-curtains.image-3 .multi-textures img:nth-child(5) {
-  display: block;
-}
+    .no-curtains #flowmap img {
+        display: block;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+    }
 
-.no-curtains.image-4 .multi-textures img:nth-child(6) {
-  display: block;
 }
 </style>

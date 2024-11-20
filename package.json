@@ -9,7 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "curtainsjs": "^8.1.6",
+    "dotenv": "^16.4.5",
+    "emailjs": "^4.0.3",
+    "emailjs-com": "^3.2.0",
     "gsap": "^3.12.5",
     "locomotive-scroll": "^4.1.4",
     "smooth-scrollbar": "^8.8.4",

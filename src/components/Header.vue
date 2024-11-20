@@ -98,6 +98,8 @@ const moveIndicatorToActiveLink = () => {
       duration: 0.3,
       ease: "power2.out",
     });
+  } else { 
+    circle.value.style.display ="none"
   }
 };
 </script>

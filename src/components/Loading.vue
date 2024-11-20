@@ -19,9 +19,13 @@
     <div
       class="flex justify-center items-center w-full h-full animated-background"
     >
-      <img src="../assets/img/FuJi.svg" alt="" class="fade-in-image w-[30vw]" />
+      <img src="../assets/img/FuJi.svg" alt="" class="fade-in-image w-[20vw]" />
       <p class="studio">
-        <span v-for="(letter, index) in letters" :key="index" class="letter">
+        <span
+          v-for="(letter, index) in letters"
+          :key="index"
+          class="letter relative inline-block"
+        >
           {{ letter }}
         </span>
       </p>
@@ -42,11 +46,13 @@ export default {
     // Animation GSAP pour chaque lettre
     gsap.fromTo(
       ".letter",
-      { opacity: 0, y: 100 },
+      { opacity: 0, y: -50, x: -20, filter: "blur(5px)" },
       {
         opacity: 1,
         y: 0,
+        x: 0,
         duration: 0.5,
+        filter: "blur(0px)",
         ease: "power2.out",
         stagger: 0.1,
         delay: 1.5,
@@ -55,14 +61,14 @@ export default {
 
     // Disparition du composant après 5 secondes
     setTimeout(() => {
-      gsap.to(this.$refs.loadingOverlayBg, {
+      gsap.to(this.$refs.loadingOverlay, {
         opacity: 0,
-        duration: 2,
+        duration: 0.5,
         onComplete: () => {
           this.$refs.loadingOverlay.style.display = "none"; // Cache le composant après l'animation
         },
       });
-    }, 3000);
+    }, 2500);
   },
 };
 </script>
@@ -81,23 +87,22 @@ export default {
   box-shadow: #f3f4f755 15px 15px 100px inset, #f3f4f7 15px 15px 100px;
   border-bottom-right-radius: 1000px;
   background: transparent;
-  animation: moveBackground 1s ease-in-out forwards,
-    moveBackground 1s forwards ease-in-out 3.5s reverse;
+  animation: moveBackground 1s ease-in-out forwards;
 }
 
 .fade-in-image {
   opacity: 0;
-  animation: fadeIn 0.5s forwards 1s, fadeIn 0.5s forwards 3s reverse;
+  animation: fadeIn 0.5s forwards 1s;
 }
 
 .studio {
   text-shadow: white 0px 0px 0.5vw;
-  font-size: 5vw;
-  letter-spacing: 4.5vw;
+  font-size:2.5vw;
+  letter-spacing: 3.5vw;
   position: absolute;
-  margin-top: 10.5vw;
-  margin-left: 2.5vw;
-  animation: fadeIn 0.5s forwards 3s reverse;
+  margin-top: 7vw;
+  margin-left: 2vw;
+  /* animation: fadeIn 0.5s forwards 3s reverse; */
 }
 
 @keyframes fadeIn {
