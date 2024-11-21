@@ -101,7 +101,7 @@
                 <div class="plane-inner h-full w-full -translate-y-full">
                   <div class="plane">
                     <img
-                      src="../assets/img/studio/Fideline.jpg"
+                      src="../assets/img/studio/fideline.jpg"
                       crossorigin=""
                       data-sampler="planeTexture"
                     />
@@ -112,7 +112,7 @@
                 <div class="plane-inner h-full w-full">
                   <div class="plane" ref="photo2">
                     <img
-                      src="../assets/img/studio/Julie.jpg"
+                      src="../assets/img/studio/julie.jpg"
                       crossorigin=""
                       data-sampler="planeTexture"
                     />
