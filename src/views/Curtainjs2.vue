@@ -1,39 +1,41 @@
 <template>
-<div >
-
-
-        <p class="absolute">coucou</p>
-        <div id="canvas" ref="photo1"></div>
-        <div class="plane-wrapper">
-                <div class="plane-inner h-full w-full">
-                  <div class="plane">
-                    <img
-                      src="../assets/img/portfolio/reah.png"
-                      crossorigin=""
-                      data-sampler="planeTexture"
-                    />
-                  </div>
-                </div>
-              </div>
-      <section class="h-[100vh]">
-
-        <Curtainjs/>
-      </section>
-</div>
+  <div>
+    <p class="absolute">coucou</p>
+    <div id="canvas" ref="photo1"></div>
+    <div class="plane-wrapper">
+      <div class="plane-inner h-full w-full">
+        <div class="plane">
+          <img
+            src="../assets/img/portfolio/reah.jpg"
+            crossorigin=""
+            data-sampler="planeTexture"
+          />
+        </div>
+      </div>
+    </div>
+    <section class="h-[100vh]">
+      <Curtainjs />
+    </section>
+  </div>
 </template>
 
 <script setup>
 import gsap from "gsap";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUnmounted } from "vue";
 import LocomotiveScroll from "locomotive-scroll";
 import Curtainjs from "../components/Curtainjs.vue";
-
 
 import { Curtains, Plane, Vec2, Vec3 } from "curtainsjs";
 import { fragmentShader, vertexShader } from "../shaders/services-shader.js";
 
+let curtains;
 onMounted(() => {
-const planes = [];
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
+  const planes = [];
   let scrollEffect = 0;
 
   // get our planes elements
@@ -43,7 +45,7 @@ const planes = [];
   const useNativeScroll = scroll.isMobile;
 
   // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
+  curtains = new Curtains({
     alpha: true,
     container: "canvas",
     watchScroll: useNativeScroll, // watch scroll on mobile not on desktop since we're using locomotive scroll
@@ -196,22 +198,28 @@ const planes = [];
            */
   }
 });
+
+
+onUnmounted(() => {
+  if (curtains) {
+    curtains.dispose();
+  }
+});
 </script>
 <style scoped>
 @media screen {
+  #canvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100vh;
 
-   #canvas {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 100vh;
+    z-index: -1;
 
-  z-index: -1;
+    opacity: 0;
 
-  opacity: 0;
-
-  transition: opacity 0.5s ease-in;
-}
+    transition: opacity 0.5s ease-in;
+  }
 }
 </style>

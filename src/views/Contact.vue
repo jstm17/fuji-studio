@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
 import PrimaryButton from "../components/PrimaryButton.vue";
 import ContactCurtain from "../components/ContactCurtain.vue";
@@ -130,8 +130,16 @@ const words = ref(null);
 const texts = ref([]);
 const isSending = ref(false); // État de l'envoi
 
+let scroll;
+let curtains;
 onMounted(() => {
-  const scroll = new LocomotiveScroll({
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
+
+  scroll = new LocomotiveScroll({
     el: document.querySelector(".contact-container"),
     smooth: true,
     smartphone: { smooth: true },
@@ -141,7 +149,6 @@ onMounted(() => {
   });
 
   const socialMedias = document.querySelectorAll(".social-media");
-  console.log(socialMedias);
   const tl = gsap.timeline();
 
   socialMedias.forEach((socialMedia) => {
@@ -250,7 +257,6 @@ const form = ref({
 
 // Fonction de soumission
 const submitForm = () => {
-  console.log("first");
   if (isSending.value) return; // Empêche les envois multiples
   isSending.value = true;
 
@@ -275,6 +281,16 @@ const submitForm = () => {
       }
     );
 };
+
+onUnmounted(() => {
+  if (scroll) {
+    scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
+  }
+  // ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Nettoyez ScrollTrigger
+  if (curtains) {
+    curtains.dispose();
+  }
+});
 </script>
 
 

@@ -95,7 +95,7 @@
             <!-- <div class="bg-black" ref="photo1"><Curtainjs2 /></div> -->
             <div class="plane" ref="photo1">
               <img
-                src="../assets/img/portfolio/reah.png"
+                src="../assets/img/portfolio/reah.jpg"
                 crossorigin=""
                 data-sampler="planeTexture"
                 
@@ -103,7 +103,7 @@
             </div>
             <div class="plane" ref="photo2">
               <img
-                src="../assets/img/portfolio/reah.png"
+                src="../assets/img/portfolio/reah.jpg"
                 crossorigin=""
                 data-sampler="planeTexture"
                 
@@ -207,7 +207,7 @@ let simplePlane = null;
 
 const initCurtains = () => {
   // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
+  curtains = new Curtains({
     container: "canvas",
     pixelRatio: Math.min(1.5, window.devicePixelRatio), // limit pixel ratio for performance
   });

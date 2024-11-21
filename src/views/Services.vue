@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="services-container w-full relative"
-    ref="servicesContainer"
-  >
+  <div class="services-container w-full relative" ref="servicesContainer">
     <div id="canvas"></div>
     <div id="page-content">
       <div id="content" class="flex flex-col gap-16 bounded pb-16">
@@ -58,7 +55,7 @@
               class="plane-wrapper relative w-[46%] h-[20vw] max-xl:w-full max-xs:min-h-[600px] max-sm:min-h-[450px] max-md:min-h-[350px] max-lg:min-h-[300px] max-xl:min-h-[250px] flex justify-center items-center"
             >
               <div
-                class="flex flex-col px-10 py-8 justify-center items-center h-full w-full bg-[#ffffffb1] backdrop-blur-sm w-[79%] h-[80%]"
+                class="flex flex-col px-10 py-8 justify-center items-center h-full w-full bg-[#ffffffb1] backdrop-blur-sm w-[81%] h-[79%]"
               >
                 <span class="plane-title text-3xl font-semibold mb-2">{{
                   plane.title
@@ -96,7 +93,9 @@
           </h1>
           <router-link to="/contact">
             <div ref="" class="my-10">
-              <PrimaryButton buttonText="Contactez-nous pour connaitre nos tarifs"></PrimaryButton>
+              <PrimaryButton
+                buttonText="Contactez-nous pour connaître nos tarifs"
+              ></PrimaryButton>
             </div>
           </router-link>
         </div>
@@ -136,13 +135,17 @@ const heading3 = ref(null);
 
 const planesData = ref([
   {
-    image: new URL("../assets/img/services/web-design.webp", import.meta.url).href,
+    image: new URL("../assets/img/services/web-design.webp", import.meta.url)
+      .href,
     title: "Web Design",
     description:
       "Concevez un design qui attire et engage votre audience. Nous créons des designs sur mesure, pensés pour raconter l’histoire de votre marque et offrir une expérience fluide et agréable. En tant que créatives, nous utilisons une approche esthétique et fonctionnelle, afin que chaque élément soit en harmonie avec vos objectifs.",
   },
   {
-    image: new URL("../assets/img/services/developpement-web.webp", import.meta.url).href,
+    image: new URL(
+      "../assets/img/services/developpement-web.webp",
+      import.meta.url
+    ).href,
     title: "Développement Web sur Mesure",
     description:
       "Transformez vos idées en un site performant et facile à gérer. En s’appuyant sur les technologies les plus récentes, nous développons des sites optimisés et modulables, du site vitrine au e-commerce. Nous garantissons des solutions techniques qui allient performance, sécurité, et évolutivité.",
@@ -154,7 +157,8 @@ const planesData = ref([
       "Rendez votre site visible là où votre audience vous cherche. Notre expertise en SEO naturel aide votre site à apparaître dans les résultats de recherche, sans négliger l’authenticité de votre contenu. Nous vous accompagnons dans la définition de mots-clés et dans l’optimisation technique.",
   },
   {
-    image: new URL("../assets/img/services/formations.webp", import.meta.url).href,
+    image: new URL("../assets/img/services/formations.webp", import.meta.url)
+      .href,
     title: "Formation et Accompagnement Digital",
     description:
       "Devenez autonomes dans le digital ! Grâce à nos formations adaptées, développez les compétences pour gérer votre site et optimiser votre SEO. Nous proposons un accompagnement pas-à-pas pour que vous puissiez avancer avec confiance.",
@@ -168,9 +172,16 @@ const planesData = ref([
 ]);
 
 let carouselAnimation;
+let scroll;
+let curtains;
 onMounted(() => {
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
   //    Initialiser Locomotive Scroll
-  const scroll = new LocomotiveScroll({
+  scroll = new LocomotiveScroll({
     el: document.getElementById("content"),
     smooth: true,
     smartphone: { smooth: true },
@@ -213,7 +224,7 @@ onMounted(() => {
   const useNativeScroll = scroll.isMobile;
 
   // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
+  curtains = new Curtains({
     alpha: true,
     container: "canvas",
     watchScroll: useNativeScroll, // watch scroll on mobile not on desktop since we're using locomotive scroll
@@ -355,20 +366,20 @@ onMounted(() => {
   }
 
   function applyPlanesParallax(index) {
-      // calculate the parallax effect
-      // get our window size
-      const sceneBoundingRect = curtains.getBoundingRect();
-      // get our plane center coordinate
-      const planeBoundingRect = planes[index].getBoundingRect();
-      const planeOffsetTop = planeBoundingRect.top + planeBoundingRect.height / 2;
-      // get a float value based on window height (0 means the plane is centered)
-      const parallaxEffect =
-        (planeOffsetTop - sceneBoundingRect.height / 2) /
-        sceneBoundingRect.height;
-      // apply the parallax effect
-      planes[index].relativeTranslation.y =
-        (parallaxEffect * sceneBoundingRect.height) / 20;
-      /*
+    // calculate the parallax effect
+    // get our window size
+    const sceneBoundingRect = curtains.getBoundingRect();
+    // get our plane center coordinate
+    const planeBoundingRect = planes[index].getBoundingRect();
+    const planeOffsetTop = planeBoundingRect.top + planeBoundingRect.height / 2;
+    // get a float value based on window height (0 means the plane is centered)
+    const parallaxEffect =
+      (planeOffsetTop - sceneBoundingRect.height / 2) /
+      sceneBoundingRect.height;
+    // apply the parallax effect
+    planes[index].relativeTranslation.y =
+      (parallaxEffect * sceneBoundingRect.height) / 20;
+    /*
           // old way using setRelativeTranslation
           planes[index].setRelativeTranslation(new Vec3(0, parallaxEffect * (sceneBoundingRect.height / 4)));
            */
@@ -443,14 +454,17 @@ onMounted(() => {
     },
   });
   // Activer ScrollTrigger
-  //   ScrollTrigger.refresh();
+  // ScrollTrigger.refresh();
 });
+
 onUnmounted(() => {
-  // if (scroll) {
-  //   scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
-  //   scroll = null;
-  // }
+  if (scroll) {
+    scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
+  }
   // ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Nettoyez ScrollTrigger
+  if (curtains) {
+    curtains.dispose();
+  }
 });
 </script>
 

@@ -5,7 +5,9 @@
       :style="{ backgroundImage: `url(${currentImage})` }"
       class="image-bg fixed -translate-y-[102%] bg-no-repeat -translate-x-[2%] w-[104%] h-[102vh] bg-cover bg-center"
     ></div>
-    <div class="pt-32 max-md:pt-24 flex flex-col justify-between h-[100vh] pb-12 gap-10">
+    <div
+      class="pt-32 max-md:pt-24 flex flex-col justify-between h-[100vh] pb-12 gap-10"
+    >
       <h2
         ref="heading"
         class="bounded mt-6 overflow-hidden uppercasebounded text-center w-full lg:px-[10%] uppercase"
@@ -62,15 +64,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, onUnmounted } from "vue";
 import gsap from "gsap";
 import { Curtains, Plane } from "curtainsjs";
 
 // Slides du carousel
 const slides = ref([
-  { url: "./src/assets/img/portfolio/careforu.png", title: "CareforU", link: "/careforu" },
-  { url: "./src/assets/img/portfolio/reah.png", title: "Reah", link: "/reah" },
-  { url: "./src/assets/img/portfolio/joyty.png", title: "Joyty", link: "/joyty" },
+  { url: "./src/assets/img/portfolio/reah.jpg", title: "Reah", link: "/reah" },
+  {
+    url: "./src/assets/img/portfolio/careforu.jpg",
+    title: "CareforU",
+    link: "/careforu",
+  },
+  {
+    url: "./src/assets/img/portfolio/joyty.jpg",
+    title: "Joyty",
+    link: "/joyty",
+  },
 ]);
 
 // Variables globales
@@ -113,7 +123,7 @@ const initCurtains = () => {
   );
 
   // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
+  curtains = new Curtains({
     container: "canvas",
     pixelRatio: Math.min(1.5, window.devicePixelRatio), // limit pixel ratio for performance
   });
@@ -235,7 +245,11 @@ const initCurtains = () => {
 };
 
 onMounted(() => {
-
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
   const tl = gsap.timeline();
   tl.from(words.value, {
     opacity: 0,
@@ -245,7 +259,7 @@ onMounted(() => {
     duration: 0.8,
   });
 
-    tl.from(carouselInfo.value, {
+  tl.from(carouselInfo.value, {
     opacity: 0,
     ease: "power3.out",
     y: 20,
@@ -307,11 +321,10 @@ const handleWheel = (e) => {
   // Limiter la position cible
   targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
 
-
   const windowCenter = window.innerWidth / 2;
   const images = gsap.utils.toArray(".plane");
   images.forEach((image, index) => {
-    const imagePosLeft = image.getBoundingClientRect().left - gap/2;
+    const imagePosLeft = image.getBoundingClientRect().left - gap / 2;
     if (imagePosLeft < windowCenter) {
       updateSlide(index);
     }
@@ -326,6 +339,13 @@ function updateSlide(index) {
 
 onBeforeUnmount(() => {
   window.removeEventListener("wheel", handleWheel); // Remplace `handleScroll` par ta fonction
+});
+
+
+onUnmounted(() => {
+  if (curtains) {
+    curtains.dispose();
+  }
 });
 </script>
 
@@ -401,7 +421,6 @@ onBeforeUnmount(() => {
   width: 100%;
   height: auto;
 }
-
 
 .portfolioTitle-leave-active,
 .portfolioTitle-enter-active {

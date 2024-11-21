@@ -3,7 +3,7 @@
     <div id="content" ref="contentRef">
       <CurtainWork>
         <img
-          src="../assets/img/portfolio/joyty.png"
+          src="../assets/img/portfolio/joyty.jpg"
           crossorigin=""
           data-sampler="simplePlaneTexture"
           class="hidden"
@@ -39,7 +39,14 @@
             <div>
               <p class="font-bold uppercase mb-2">Description</p>
               <p class="text-justify">
-                JOYTY est une plateforme innovante dédiée à la célébration d'événements. Notre mission est de centraliser et simplifier l'organisation d'événements, permettant ainsi à nos utilisateurs de profiter pleinement de chaque moment spécial sans les tracas de la planification. <br> JOYTY propose une application et une plateforme web intégrées avec diverses fonctionnalités pour organiser, réserver et partager des événements.
+                JOYTY est une plateforme innovante dédiée à la célébration
+                d'événements. Notre mission est de centraliser et simplifier
+                l'organisation d'événements, permettant ainsi à nos utilisateurs
+                de profiter pleinement de chaque moment spécial sans les tracas
+                de la planification. <br />
+                JOYTY propose une application et une plateforme web intégrées
+                avec diverses fonctionnalités pour organiser, réserver et
+                partager des événements.
               </p>
             </div>
             <div class="">
@@ -48,12 +55,14 @@
             </div>
             <div class="">
               <p class="font-bold uppercase mb-2">Outils</p>
-              <p>
-                Vue.js, Vite, Tailwind, JavaScript, GSAP, Curtain.js, Figma
-              </p>
+              <p>Vue.js, Vite, Tailwind, JavaScript, GSAP, Curtain.js, Figma</p>
             </div>
 
-            <a href="https://joyty.io" target="_blank" class="my-10 self-center">
+            <a
+              href="https://joyty.io"
+              target="_blank"
+              class="my-10 self-center"
+            >
               <PrimaryButton buttonText="Visiter le site"></PrimaryButton>
             </a>
           </div>
@@ -61,13 +70,9 @@
 
         <div ref="imgContainer" class="my-10 flex flex-col gap-10">
           <div class="grid grid-cols-2 max-md:grid-cols-1 gap-10">
+            <img src="../assets/img/portfolio/joyty/home.jpg" alt="" class="" />
             <img
-              src="../assets/img/portfolio/joyty/home.png"
-              alt=""
-              class=""
-            />
-            <img
-              src="../assets/img/portfolio/joyty/services.png"
+              src="../assets/img/portfolio/joyty/services.jpg"
               alt=""
               class=""
             />
@@ -76,10 +81,9 @@
         <router-link
           to="/portfolio"
           class="mt-20 block flex justify-center w-full"
-          
         >
           <div ref="backLink">
-              <PrimaryButton buttonText="Retour au portfolio"></PrimaryButton>
+            <PrimaryButton buttonText="Retour au portfolio"></PrimaryButton>
           </div>
         </router-link>
       </div>
@@ -115,9 +119,16 @@ const titleContainer = ref(null);
 const workInfos = ref(null);
 const backLink = ref(null);
 
+let scroll;
+let curtains;
 onMounted(() => {
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
   //    Initialiser Locomotive Scroll
-  const scroll = new LocomotiveScroll({
+  scroll = new LocomotiveScroll({
     el: document.getElementById("content"),
     smooth: true,
     smartphone: { smooth: true },
@@ -194,7 +205,7 @@ onMounted(() => {
       end: `${workInfos.value.getBoundingClientRect().bottom + 200}px bottom`,
       scrub: 1,
       scroller: contentRef.value,
-    //   markers: true,
+      //   markers: true,
     },
   });
 
@@ -208,9 +219,19 @@ onMounted(() => {
       end: `bottom bottom`,
       scrub: 1,
       scroller: contentRef.value,
-        markers: true,
+      // markers: true,
     },
   });
+});
+
+onUnmounted(() => {
+  if (scroll) {
+    scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
+  }
+  // ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Nettoyez ScrollTrigger
+  if (curtains) {
+    curtains.dispose();
+  }
 });
 </script>
 <style scoped>

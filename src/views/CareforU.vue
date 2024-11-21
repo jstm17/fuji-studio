@@ -3,7 +3,7 @@
     <div id="content" ref="contentRef">
       <CurtainWork>
         <img
-          src="../assets/img/portfolio/careforu.png"
+          src="../assets/img/portfolio/careforu.jpg"
           crossorigin=""
           data-sampler="simplePlaneTexture"
           class="hidden"
@@ -69,8 +69,9 @@
           </div>
         </div>
 
-        <div ref="imgContainer" class="my-10 flex flex-col gap-10">
-          <img src="../assets/img/portfolio/careforu/home.png" alt="" />
+        <div ref="imgContainer" class="my-10 flex flex-col">
+          <img src="../assets/img/portfolio/careforu/home.jpg" alt="" />
+          <img src="../assets/img/portfolio/careforu/home2.jpg" alt="" />
         </div>
         <router-link
           to="/portfolio"
@@ -84,12 +85,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CareforU",
-};
-</script>
 
 <script setup>
 import CurtainWork from "../components/CurtainWork.vue";
@@ -119,9 +114,17 @@ const titleContainer = ref(null);
 const workInfos = ref(null);
 const backLink = ref(null);
 
+let scroll;
+let curtains;
+
 onMounted(() => {
+  window.addEventListener("beforeunload", () => {
+    if (curtains) {
+      curtains.dispose();
+    }
+  });
   //    Initialiser Locomotive Scroll
-  const scroll = new LocomotiveScroll({
+  scroll = new LocomotiveScroll({
     el: document.getElementById("content"),
     smooth: true,
     smartphone: { smooth: true },
@@ -215,6 +218,16 @@ onMounted(() => {
       // markers: true,
     },
   });
+});
+
+onUnmounted(() => {
+  if (scroll) {
+    scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
+  }
+  // ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Nettoyez ScrollTrigger
+  if (curtains) {
+    curtains.dispose();
+  }
 });
 </script>
 <style scoped>

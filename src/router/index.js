@@ -25,15 +25,15 @@ const routes = [
     meta: { transition: 'portfolio' },
   },
   {
-    path: '/careforu',
-    name: 'CareforU',
-    component: CareforU,
-    meta: { transition: 'work' },
-  },
-  {
     path: '/reah',
     name: 'Reah',
     component: Reah,
+    meta: { transition: 'work' },
+  },
+  {
+    path: '/careforu',
+    name: 'CareforU',
+    component: CareforU,
     meta: { transition: 'work' },
   },
   {

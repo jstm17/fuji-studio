@@ -157,7 +157,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onUnmounted } from "vue";
+import { onMounted, ref, onUnmounted, onBeforeUnmount } from "vue";
 import gsap from "gsap";
 import PrimaryButton from "../components/PrimaryButton.vue";
 import BubbleButton from "../components/BubbleButton.vue";
@@ -240,8 +240,10 @@ window.addEventListener("resize", () => {
   windowWidth.value = window.innerWidth;
 });
 
+let scroll;
+let curtains;
 onMounted(() => {
-  const scroll = new LocomotiveScroll({
+  scroll = new LocomotiveScroll({
     el: document.querySelector(".content"),
     smooth: true,
     smartphone: { smooth: true },
@@ -284,7 +286,7 @@ onMounted(() => {
   const useNativeScroll = scroll.isMobile;
 
   // set up our WebGL context and append the canvas to our wrapper
-  const curtains = new Curtains({
+  curtains = new Curtains({
     alpha: true,
     container: "canvas",
     watchScroll: useNativeScroll, // watch scroll on mobile not on desktop since we're using locomotive scroll
@@ -621,6 +623,16 @@ onMounted(() => {
       }
     }
   });
+});
+
+onUnmounted(() => {
+  if (scroll) {
+    scroll.destroy(); // Détruisez l'instance de Locomotive Scroll
+  }
+  // ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Nettoyez ScrollTrigger
+  if (curtains) {
+    curtains.dispose();
+  }
 });
 </script>
 
