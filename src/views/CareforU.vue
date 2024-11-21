@@ -10,30 +10,27 @@
         />
       </CurtainWork>
 
-      <div class="bounded pb-32">
-        <div
-          ref="titleContainer"
-          class="relative w-full flex justify-between items-center max-md:mt-10"
+      <div
+        ref="titleContainer"
+        class="relative w-full flex justify-between items-center max-md:mt-10"
+      >
+        <h1 ref="title" class="text-center w-full uppercase absolute overflow-hidden flex justify-center">
+          <span
+            v-for="(word, index) in titleWords"
+            :key="index"
+            class="inline-block relative overflow-hidden"
+          >
+            <span class="inline-block" ref="words">{{ word }}</span>
+          </span>
+        </h1>
+        <p
+          ref="titleBg"
+          class="titleBg text-[#65ADFF20] text-[15vw] text-center w-full font-[Kalnia] font-semibold uppercase max-sm:text-[25vw]"
         >
-          <h1
-            ref="title"
-            class="text-center w-full absolute uppercase overflow-hidden"
-          >
-            <span
-              v-for="(word, index) in titleWords"
-              :key="index"
-              class="inline-block relative overflow-hidden"
-            >
-              <span class="inline-block" ref="words">{{ word }}</span>
-            </span>
-          </h1>
-          <p
-            ref="titleBg"
-            class="titleBg text-[#65ADFF20] text-[15vw] text-center w-full font-[Kalnia] font-semibold uppercase"
-          >
-            {{ titleText }}
-          </p>
-        </div>
+          {{ titleText }}
+        </p>
+      </div>
+      <div class="bounded pb-32">
         <div class="py-8 flex flex-col jusitfy-center items-center w-full">
           <div ref="workInfos" class="work-infos lg:w-1/2 flex flex-col gap-10">
             <div>

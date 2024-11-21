@@ -55,7 +55,7 @@
               class="plane-wrapper relative w-[46%] h-[20vw] max-xl:w-full max-xs:min-h-[600px] max-sm:min-h-[450px] max-md:min-h-[350px] max-lg:min-h-[300px] max-xl:min-h-[250px] flex justify-center items-center"
             >
               <div
-                class="flex flex-col px-10 py-8 justify-center items-center h-full w-full bg-[#ffffffb1] backdrop-blur-sm w-[81%] h-[79%]"
+                class="flex flex-col px-10 py-8 justify-center items-center bg-[#ffffffb1] backdrop-blur-sm w-[80%] h-[80%]"
               >
                 <span class="plane-title text-3xl font-semibold mb-2">{{
                   plane.title

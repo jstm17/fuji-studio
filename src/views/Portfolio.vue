@@ -10,13 +10,13 @@
     >
       <h2
         ref="heading"
-        class="bounded mt-6 overflow-hidden uppercasebounded text-center w-full lg:px-[10%] uppercase"
+        class="bounded mt-6 overflow-hidden uppercasebounded text-center w-full lg:px-[10%] uppercase max-sm:!text-xl flex flex-wrap gap-x-8 max-sm:gap-x-4 justify-center"
         data-scroll
       >
         <span
           v-for="(word, index) in titleWords"
           :key="index"
-          class="inline-block mr-8 relative overflow-hidden pb-4 max-lg:pb-2 max-sm:pb-1"
+          class="inline-block relative overflow-hidden pb-4 max-lg:pb-2 max-sm:pb-0"
         >
           <span class="inline-block" ref="words">{{ word }}</span>
         </span>

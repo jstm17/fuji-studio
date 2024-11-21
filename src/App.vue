@@ -1,7 +1,7 @@
   
 <template>
   <div id="app">
-    <Loading />
+    <!-- <Loading /> -->
     <Header />
 
     <main class="flex-1">
@@ -25,8 +25,8 @@ import Header from "./components/Header.vue";
 import Cursor from "./components/Cursor.vue";
 
 // Reactive properties
-// const isLoading = ref(false);
-const isLoading = ref(true);
+const isLoading = ref(false);
+// const isLoading = ref(true);
 const windowWidth = ref(window.innerWidth);
 const route = useRoute();
 
@@ -62,12 +62,12 @@ const reloadOnResize = () => {
 };
 
 onMounted(() => {
-  // Trigger loading animation (e.g., 4 seconds)
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 3000);
+  // // Trigger loading animation (e.g., 4 seconds)
+  // setTimeout(() => {
+  //   isLoading.value = false;
+  // }, 3000);
 
-  // Enable page reload on resize
-  reloadOnResize();
+  // // Enable page reload on resize
+  // reloadOnResize();
 });
 </script>

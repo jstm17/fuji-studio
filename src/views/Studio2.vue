@@ -75,7 +75,7 @@
                 }}</span>
               </span>
             </h2>
-            <p class="text-start pb-32" ref="description">
+            <p class="text-start pb-32 max-header:pb-0" ref="description">
               Chez FiJu, nous croyons en la création de solutions numériques qui
               non seulement fonctionnent parfaitement, mais qui séduisent les
               utilisateurs. Notre mission est de créer des sites et applications

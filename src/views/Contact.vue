@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-container pb-20 pt-32 bounded max-lg:pt-24 max-md:pt-16">
+  <div class="contact-container pb-20 pt-32 bounded max-lg:pt-24 max-md:pb-10">
     <h2 ref="heading" class="my-6 overflow-hidden uppercase">
       <span
         v-for="(word, index) in titleWords"
@@ -61,7 +61,7 @@
           :disabled="isSending"
         ></PrimaryButton>
       </form>
-      <div class="flex flex-col gap-6 max-md:w-full h-full" ref="contactInfos">
+      <div class="flex flex-col gap-6 max-md:w-full h-full max-md:gap-0" ref="contactInfos">
         <div
           class="flex justify-between w-full gap-x-6 gap-y-2 flex-wrap max-sm:flex-col max-sm:gap-y-4"
         >

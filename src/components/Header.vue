@@ -18,7 +18,7 @@
         v-for="(link, index) in links"
         :key="index"
         :to="link.path"
-        class="nav-link"
+        class="nav-link text-xl my-4"
         ref="navLinks"
          @click="toggleMenu"
         >{{ link.name }}</router-link
@@ -108,7 +108,6 @@ const moveIndicatorToActiveLink = () => {
 <style scoped>
 .nav-link {
   position: relative;
-  padding-bottom: 0.5rem;
   text-decoration: none;
   color: inherit;
 }
